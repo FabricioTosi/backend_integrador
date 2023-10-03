@@ -1,0 +1,11 @@
+{
+    "database": {
+        "host": "127.0.0.1",
+        "user": "root",
+        "password": "admin",
+        "database": "silicon misiones"
+    },
+    "server": {
+        "port": 8080
+    }
+}
