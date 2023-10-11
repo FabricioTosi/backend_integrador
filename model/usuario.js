@@ -23,105 +23,96 @@ funCallback: en una funcion que la enviamos desde el endpoint del controlador, e
 // C = CREATE
 // usuarioController --> app.post('/', createUser);
 usuario_db.create = function (usuario, funcallback) {
-    consulta = "INSERT INTO USUARIO (nickname, password, email, telefono, rol) VALUES (?,?,?,?,2);";
-    params = [usuario.nickname, usuario.passwor, usuario.email, usuario.telefono];
+    // Verificar si el usuario ya existe
+    const consulta = "SELECT id_usuario FROM USUARIO WHERE nickname = ?;";
+    const params = [usuario.nickname];
 
-    connection.query(consulta, params, (err, detail_bd) => {
+    connection.query(consulta, params, (err, rows) => {
         if (err) {
-
-            if (err.code == "ER_DUP_ENTRY") {
-                funcallback({
-                    mensajito: "el usuario ya fue registrado",
-                    detalle: err
-                });
-            } else {
-                funcallback({
-                    mensajito: "error diferente",
-                    detalle: err
-                });
-            }
+            funcallback({
+                mensajito: "error diferente",
+                detalle: err
+            });
+        } else if (rows.length > 0) {
+            funcallback({
+                mensajito: "El usuario ya fue registrado",
+                detalle: rows
+            });
         } else {
+            // Si el usuario no existe, realizar la inserción
+            const insertConsulta = "INSERT INTO USUARIO (nickname, password, email, telefono, rol_id_rol) VALUES (?,?,?,?,?);";
+            const insertParams = [usuario.nickname, usuario.password, usuario.email, usuario.telefono, usuario.rol_id_rol];
 
-            funcallback(undefined, {
-                mensajito: "se creo el usaurio " + usuario.nickname,
-                detalle: detail_bd
+            connection.query(insertConsulta, insertParams, (insertErr, detail_bd) => {
+                if (insertErr) {
+                    funcallback({
+                        mensajito: "Error al crear el usuario",
+                        detalle: insertErr
+                    });
+                } else {
+                    funcallback(undefined, {
+                        mensajito: "Se creó el usuario " + usuario.nickname,
+                        detalle: detail_bd
+                    });
+                }
             });
         }
     });
-}
+};
 
-//R = READ
-// usuarioController --> app.get('/', getAll);
-usuario_db.getAll = function (funCallback) {
-    var consulta = 'SELECT * FROM USUARIO';
-    connection.query(consulta, function (err, rows) {
-        if (err) {
-            funCallback(err);
-            return;
-        } else {
-            funCallback(undefined, rows);
-        }
-    });
-}
-
-//U = UPDATE
-// usuarioController --> app.put('/:id_usuario', updateUser);
-usuario_db.update = function (datos_usuario, id_usaurio, funcallback) {
-    params = [datos_usuario.mail, datos_usuario.nickname, datos_usuario.clave, id_usaurio]
-    consulta = "UPDATE USUARIO set nickname = ?, password = ?, email = ?, telefono = ? WHERE id_usuario = ?;";
-
-    connection.query(consulta, params, (err, result) => {
-        if (err) {
-            if (err.code = "ER_TRUNCATED_WRONG_VALUE") {
-                funcallback({
-                    message: `el id de usuario es incorrecto, se espera un numero entero`,
-                    detail: err
-                });
-            } else {
-                funcallback({
-                    message: `error desconocido`,
-                    detail: err
-                });
-            }
-        } else {
-            if (result.affectedRows == 0) {
-                funcallback({
-                    message: "No existe un usuario que coincida con el criterio de busqueda",
-                    detail: result
-                });
-            } else {
-                funcallback(undefined, {
-                    message: `se actualizaron los datos del usuario ${id_usaurio}`,
-                    detail: result
-                });
-            }
-    
-        }
-    });
-
-
-
-}
 
 // D = DELETE
 // usuarioController --> app.delete('/:id_usuario', deleteUser);
 usuario_db.borrar = function (id_usuario, retorno) {
-    consulta = "DELETE FROM USUARIO WHERE id_usuario = ?";
+    const consulta = "DELETE FROM USUARIO WHERE id_usuario = ?";
     connection.query(consulta, id_usuario, (err, result) => {
         if (err) {
-            retorno({ menssage: err.code, detail: err }, undefined);
-
+            retorno({
+                message: "Error al eliminar el usuario",
+                detail: err.code
+            }, undefined);
         } else {
-
-            if (result.affectedRows == 0) {
-                retorno(undefined, { message: "no se encontro el usaurio, ingrese otro id", detail: result });
+            if (result.affectedRows === 0) {
+                retorno(undefined, {
+                    message: "No se encontró ningún usuario con el ID proporcionado. Verifique el ID e inténtelo de nuevo.",
+                    detail: result
+                });
             } else {
-                retorno(undefined, { message: "usuario eliminado", detail: result });
+                retorno(undefined, {
+                    message: "El usuario ha sido eliminado exitosamente.",
+                    detail: result
+                });
             }
         }
     });
-}
+};
 
+
+usuario_db.actualizar = function (id_usuario, nuevosDatos, retorno) {
+    const consulta = "UPDATE USUARIO SET nickname = ?, password = ?, email = ?, telefono = ?, rol_id_rol = ? WHERE id = ?";
+    const params = [nuevosDatos.nickname, nuevosDatos.password, nuevosDatos.email, nuevosDatos.telefono, nuevosDatos.rol_id_rol, id_usuario];
+
+    connection.query(consulta, params, (err, result) => {
+        if (err) {
+            retorno({
+                message: "Error al actualizar el usuario",
+                detail: err.code
+            }, undefined);
+        } else {
+            if (result.affectedRows === 0) {
+                retorno(undefined, {
+                    message: "No se encontró ningún usuario con el ID proporcionado. Verifique el ID e inténtelo de nuevo.",
+                    detail: result
+                });
+            } else {
+                retorno(undefined, {
+                    message: "El usuario ha sido actualizado exitosamente.",
+                    detail: result
+                });
+            }
+        }
+    });
+};
 
 
 module.exports = usuario_db;
