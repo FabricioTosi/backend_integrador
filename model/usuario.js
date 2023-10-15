@@ -1,6 +1,7 @@
 require('rootpath')();
 const mysql = require('mysql');
 const configuracion = require("coneccion.json");
+const bcrypt = require('bcrypt');
 
 var connection = mysql.createConnection(configuracion.database);
 connection.connect((err) => {
@@ -24,6 +25,7 @@ funCallback: en una funcion que la enviamos desde el endpoint del controlador, e
 // usuarioController --> app.post('/', createUser);
 usuario_db.create = function (usuario, funcallback) {
     // Verificar si el usuario ya existe
+    
     const consulta = "SELECT id_usuario FROM USUARIO WHERE nickname = ?;";
     const params = [usuario.nickname];
 
@@ -39,9 +41,11 @@ usuario_db.create = function (usuario, funcallback) {
                 detalle: rows
             });
         } else {
+             let claveCifrada = bcrypt.hashSync(usuario.password, 10);
+
             // Si el usuario no existe, realizar la inserción
             const insertConsulta = "INSERT INTO USUARIO (nickname, password, email, telefono, rol_id_rol) VALUES (?,?,?,?,?);";
-            const insertParams = [usuario.nickname, usuario.password, usuario.email, usuario.telefono, usuario.rol_id_rol];
+            const insertParams = [usuario.nickname, claveCifrada, usuario.email, usuario.telefono, usuario.rol_id_rol];
 
             connection.query(insertConsulta, insertParams, (insertErr, detail_bd) => {
                 if (insertErr) {
@@ -89,8 +93,9 @@ usuario_db.borrar = function (id_usuario, retorno) {
 
 
 usuario_db.actualizar = function (id_usuario, nuevosDatos, retorno) {
+    let claveCifrada = bcrypt.hashSync(nuevosDatos.password, 10);
     const consulta = "UPDATE USUARIO SET nickname = ?, password = ?, email = ?, telefono = ?, rol_id_rol = ? WHERE id = ?";
-    const params = [nuevosDatos.nickname, nuevosDatos.password, nuevosDatos.email, nuevosDatos.telefono, nuevosDatos.rol_id_rol, id_usuario];
+    const params = [nuevosDatos.nickname, claveCifrada, nuevosDatos.email, nuevosDatos.telefono, nuevosDatos.rol_id_rol, id_usuario];
 
     connection.query(consulta, params, (err, result) => {
         if (err) {
@@ -114,5 +119,49 @@ usuario_db.actualizar = function (id_usuario, nuevosDatos, retorno) {
     });
 };
 
+// GET ALL
+usuario_db.getAll = function (retorno) {
+    const consulta = "SELECT * FROM USUARIO";
+    connection.query(consulta, (err, rows) => {
+        if (err) {
+            retorno({
+                message: "Error al obtener la lista de usuarios",
+                detail: err
+            }, undefined);
+        } else {
+            retorno(undefined, {
+                message: "Lista de usuarios obtenida exitosamente",
+                usuarios: rows
+            });
+        }
+    });
+};
+
+// -----------------------------------------------------------------------------
+
+//securityController --> app.post('/login', login);
+usuario_db.findByNickname = function (nickname, funCallback) {
+    //var consulta = 'SELECT * FROM usuario WHERE nickname = ?';   
+    var consulta = 'SELECT usuario.*, rol.nombre FROM usuario INNER JOIN rol ON usuario.rol_id = rol.rol_id AND usuario.nickname = ?';
+   connection.query(consulta, nickname, function (err, result) {
+       if (err) {
+           funCallback(err);
+           return;
+       } else {
+
+           if (result.length > 0) {
+               funCallback(undefined, {
+                   message: `Usuario encontrado`,
+                   detail: result[0]
+               });
+           } else {
+               funCallback({
+                   message: "No existe un usuario que coincida con el criterio de busqueda",
+                   detail: result
+               });
+           }
+       }
+   });
+}
 
 module.exports = usuario_db;

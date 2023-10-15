@@ -4,14 +4,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 var usuarioDb = require("model/usuario.js");
+const securityController = require("controller/securityController.js");
 
 // -------------------------------------------------------- 
 // --rutas de escucha (endpoint) dispoibles para USUARIOS-- 
 // -------------------------------------------------------- 
 
-app.get('/', getAll);
-app.post('/', createUser);
+app.get('/', securityController.verificarToken, getAllUsers);
+app.post('/', securityController.verificarToken, createUser);
 app.put('/:id_usuario', updateUser);
 app.delete('/:id_usuario', deleteUser);
 
@@ -23,15 +25,16 @@ app.delete('/:id_usuario', deleteUser);
 //req : datos enviados desde el frontend para que lo utilicemos
 //res : respuesta enviada desde el servidor al frontend
 
-function getAll(req, res) {
-    usuarioDb.getAll((err, resultado) => {
-        if (err) {
-            res.status(500).send(err);
+function getAllUsers(req, res) {
+    usuarioDb.getAll((error, result) => {
+        if (error) {
+            res.status(500).json(error);
         } else {
-            res.json(resultado);
+            res.status(200).json(result);
         }
     });
 }
+
 
 function createUser(req, res) {
     let usuario = req.body;
@@ -73,5 +76,6 @@ function deleteUser(req, res) {
 }
 
 module.exports = app;
+
 
 
