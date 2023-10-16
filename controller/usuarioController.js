@@ -12,8 +12,8 @@ const securityController = require("controller/securityController.js");
 // --rutas de escucha (endpoint) dispoibles para USUARIOS-- 
 // -------------------------------------------------------- 
 
-app.get('/', securityController.verificarToken, getAllUsers);
-app.post('/', securityController.verificarToken, createUser);
+app.get('/', getAllUsers);
+app.post('/', createUser);
 app.put('/:id_usuario', updateUser);
 app.delete('/:id_usuario', deleteUser);
 
