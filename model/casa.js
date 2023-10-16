@@ -50,9 +50,10 @@ casaDb.borrar = function (id_casa, retorno) {
     });
 };
 
+// probar con postman url = http://localhost:8080/casa/:id_casa
 casaDb.update = function (id_casa, nuevosDatos, retorno) {
-    const consulta = "UPDATE CASA SET descripcion = ?, precio_compra = ?, superficie = ?, precio_alquiler = ? WHERE id_casa = ?";
-    const params = [nuevosDatos.descripcion, nuevosDatos.precio_compra, nuevosDatos.superficie, nuevosDatos.precio_alquiler, id_casa];
+    const consulta = "UPDATE CASA SET descripccion = ?, precio_compra = ?, superficie = ?, precio_alquiler = ? WHERE id_casa = ?";
+    const params = [nuevosDatos.descripccion, nuevosDatos.precio_compra, nuevosDatos.superficie, nuevosDatos.precio_alquiler, id_casa];
 
     connection.query(consulta, params, (err, result) => {
         if (err) {

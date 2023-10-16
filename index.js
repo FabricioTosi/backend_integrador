@@ -11,6 +11,8 @@ morgan(':method :url :status :res[content-length] - :response-time ms');
 
 const configuracion = require("coneccion.json");
 
+const imagenesController = require("controller/imagenesController.js");
+
 const casaController = require("controller/casaController.js");
 
 const usuarioController = require("controller/usuarioController.js");
@@ -19,6 +21,7 @@ const securityController = require("controller/securityController.js");
 app.use('/security', securityController.app);
 app.use('/casa', casaController);
 app.use('/api/usuario', usuarioController);
+app.use('/api/imagenes', imagenesController);
 
 app.listen(configuracion.server.port, (err) => {
     if (err) {
