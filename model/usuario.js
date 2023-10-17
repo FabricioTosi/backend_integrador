@@ -1,6 +1,6 @@
 require('rootpath')();
 const mysql = require('mysql');
-const configuracion = require("conexion.json");
+const configuracion = require("config/conexion.json");
 const bcrypt = require('bcrypt');
 
 var connection = mysql.createConnection(configuracion.database);
@@ -44,8 +44,8 @@ usuario_db.create = function (usuario, funcallback) {
              let claveCifrada = bcrypt.hashSync(usuario.password, 10);
 
             // Si el usuario no existe, realizar la inserción
-            const insertConsulta = "INSERT INTO USUARIO (nickname, password, email, telefono, rol_id_rol) VALUES (?,?,?,?,?);";
-            const insertParams = [usuario.nickname, claveCifrada, usuario.email, usuario.telefono, usuario.rol_id_rol];
+            const insertConsulta = "INSERT INTO USUARIO (id_usuario, nickname, password, email, telefono, rol_id_rol) VALUES (?,?,?,?,?,2);";
+            const insertParams = [usuario.id_usuario, usuario.nickname, claveCifrada, usuario.email, usuario.telefono, usuario.rol_id_rol];
 
             connection.query(insertConsulta, insertParams, (insertErr, detail_bd) => {
                 if (insertErr) {
@@ -142,7 +142,7 @@ usuario_db.getAll = function (retorno) {
 //securityController --> app.post('/login', login);
 usuario_db.findByNickname = function (nickname, funCallback) {
     //var consulta = 'SELECT * FROM usuario WHERE nickname = ?';   
-    var consulta = 'SELECT usuario.*, rol.nombre FROM usuario INNER JOIN rol ON usuario.rol_id = rol.rol_id AND usuario.nickname = ?';
+    var consulta = 'SELECT usuario.*, rol.nombre_rol FROM usuario INNER JOIN rol ON usuario.rol_id_rol = rol.id_rol WHERE usuario.nickname = (?) LIMIT 0, 1000';
    connection.query(consulta, nickname, function (err, result) {
        if (err) {
            funCallback(err);

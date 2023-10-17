@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const configuracion = require('conexion.json'); // Corrige el nombre del archivo y usa una ruta relativa
+const configuracion = require('config/conexion.json'); // Corrige el nombre del archivo y usa una ruta relativa
 const bcrypt = require('bcrypt');
 
 const connection = mysql.createConnection(configuracion.database);
