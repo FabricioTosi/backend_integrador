@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('tiny'));
 morgan(':method :url :status :res[content-length] - :response-time ms');
 
-const configuracion = require("coneccion.json");
+const configuracion = require("conexion.json");
 
 const imagenesController = require("controller/imagenesController.js");
 

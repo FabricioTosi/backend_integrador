@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const configuracion = require('coneccion.json');
+const configuracion = require('conexion.json');
 const bcrypt = require('bcrypt');
 
 const connection = mysql.createConnection(configuracion.database);

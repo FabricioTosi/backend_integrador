@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const config = require("coneccion.json");
+const config = require("conexion.json");
 var usuarioDb = require("model/usuario.js");
 
 //controller: gestionaba peticiones y respuestas 
