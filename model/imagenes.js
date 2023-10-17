@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const connection = mysql.createConnection(configuracion.database);
 
 const imagenesDb = {};
-// probar en postman con esta url = http://localhost:8080/api/imagenes
+// probar en postman con esta url = http://localhost:8080/imagenes
 imagenesDb.create = function (imagenes, funcallback) {
     // Insertar una nueva imagen en la base de datos
     const consulta = "INSERT INTO imagenes (url, id_imagenes, casa_id_casa) VALUES (?, ?, ?);";
