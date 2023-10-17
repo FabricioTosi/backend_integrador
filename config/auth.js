@@ -79,65 +79,6 @@ function login(req, res) {
     });
 }
 
-// function login(req, res) {
-//     //const nickname = req.body.nickname
-//     //const clave = req.body.clave
-
-//     const { nickname, clave } = req.body; //ES6
-
-//     usuarioDb.findByNickname(nickname, (err, result) => {
-//         if (err) {
-//             res.status(500).send(err);
-//         } else {
-//             // hasta aca sabemos que el usuario con ese "nickname" existe en la DB,
-//             // ahora debemos verificar si su clave es correcta, para ello debemos desencriptarla
-//             //const iguales = bcrypt.compareSync("texto plano", "texto encriptado");
-
-//             const iguales = bcrypt.compareSync(clave, result.detail.clave);
-//             if (iguales) {
-//                 let user = {
-//                     nickname: result.detail.nickname,
-//                     mail: result.detail.mail,
-//                 }
-
-
-//                 let acces = generando(user, config.auth.accesKey, '10m');
-//                 let refresh = generando(user, config.auth.refreshKey, '12h');
-//                 console.log(acces.resolve)
-
-//                 // let retornar = {
-//                 //     datos: user,
-//                 //     accesToken: acces,
-//                 //     refreshToken: refrsh
-//                 // }
-//                 // console.log(retornar)
-
-//             } else {
-//                 res.status(401).send({
-//                     message: 'Contraseña Incorrecta'
-//                 });
-//             }
-//         }
-//     });
-// }
-
-// async function generando(user, key, time) {
-//     return await getToken(user, key, time);
-// }
-
-
-// const getToken = (user, key, time) => {
-//     return new Promise((resolve, reject) => {
-//         jwt.sign(user, key, { expiresIn: time }, (err, token) => {
-//             if (err) {
-//                 reject(err.message)
-//             } else {
-//                 resolve(token)
-//             }
-//         })
-//     })
-// };
-
 function verificarToken(req, res, next) {
     if (req.headers["authorization"]) {
         try {
