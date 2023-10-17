@@ -19,7 +19,7 @@ casaDb.create = function (casa, funcallback) {
             });
         } else {
             funcallback(undefined, {
-                mensajito: "Se creó la casa con ID " + casa.id_casa,
+                mensajito: "Se creó la casa con ID " + result.insertId,
                 detalle: result
             });
         }

@@ -23,7 +23,7 @@ compraDb.create = function (compra, funcallback) {
             });
         } else {
             funcallback(undefined, {
-                mensaje: "Se creó la compra con ID " + compra.id_compra,
+                mensaje: "Se creó la compra con ID " + result.insertId,
                 detalle: result
             });
         }

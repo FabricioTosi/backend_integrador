@@ -23,7 +23,7 @@ reservaDb.create = function (reserva, funcallback) {
             });
         } else {
             funcallback(undefined, {
-                mensaje: "Se creó la reserva con ID " + reserva.id_reserva,
+                mensaje: "Se creó la reserva con ID " + result.insertId,
                 detalle: result
             });
         }
