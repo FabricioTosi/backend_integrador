@@ -17,13 +17,14 @@ const compraController = require("controller/compraController.js");
 const reservaController = require("controller/reservaController.js");
 const securityController = require("controller/securityController.js");
 const auth = require("config/auth.js");
+const { verificarToken } = require('./config/auth');
 app.use('/security', auth.app);
 app.use('/security', securityController.app);
-app.use('/casa', casaController);
+app.use('/casa',verificarToken , casaController);
 app.use('/api/usuario', usuarioController);
-app.use('/api/imagenes', imagenesController);
-app.use('/reserva', reservaController);
-app.use('/compra', compraController);
+app.use('/api/imagenes',verificarToken , imagenesController);
+app.use('/reserva',verificarToken , reservaController);
+app.use('/compra',verificarToken , compraController);
 
 // Corrige la definición de la ruta de login
 app.post('/login', securityController.login);
