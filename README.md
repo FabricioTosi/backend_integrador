@@ -1,6 +1,6 @@
 # INMOBILIARIA BACKEND 🔐
 ## DATOS PARA SU DESCARGA
-* Primer paso realizar un npm install para que se descargen las librerias ncesarias para su funcionamiento "asegurate de posicionarte en la carpeta backend_integrador al abrir la terminal".
+* Primer paso realizar un "npm install" para que se descargen las librerias ncesarias para su funcionamiento "asegurate de posicionarte en la carpeta backend_integrador al abrir la terminal".
 * Segundo paso realizar un "npm start" para que el backend corra correctamente.
 
 ### Imagen del diagrama entidad relación "ERDPLUS".
