@@ -44,7 +44,7 @@ usuario_db.create = function (usuario, funcallback) {
              let claveCifrada = bcrypt.hashSync(usuario.password, 10);
 
             // Si el usuario no existe, realizar la inserción
-            const insertConsulta = "INSERT INTO USUARIO (id_usuario, nickname, password, email, telefono, rol_id_rol) VALUES (?,?,?,?,?,2);";
+            const insertConsulta = "INSERT INTO USUARIO (id_usuario, nickname, password, email, telefono, rol_id_rol) VALUES (?,?,?,?,?,?);";
             const insertParams = [usuario.id_usuario, usuario.nickname, claveCifrada, usuario.email, usuario.telefono, usuario.rol_id_rol];
 
             connection.query(insertConsulta, insertParams, (insertErr, detail_bd) => {
@@ -92,7 +92,7 @@ usuario_db.borrar = function (id_usuario, retorno) {
 };
 
 
-usuario_db.actualizar = function (id_usuario, nuevosDatos, retorno) {
+usuario_db.update = function (id_usuario, nuevosDatos, retorno) {
     let claveCifrada = bcrypt.hashSync(nuevosDatos.password, 10);
     const consulta = "UPDATE USUARIO SET nickname = ?, password = ?, email = ?, telefono = ?, rol_id_rol = ? WHERE id = ?";
     const params = [nuevosDatos.nickname, claveCifrada, nuevosDatos.email, nuevosDatos.telefono, nuevosDatos.rol_id_rol, id_usuario];

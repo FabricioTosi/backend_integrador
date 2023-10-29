@@ -8,9 +8,9 @@ const imagenesDb = {};
 // probar en postman con esta url = http://localhost:8080/imagenes
 imagenesDb.create = function (imagenes, funcallback) {
     // Insertar una nueva imagen en la base de datos
-    const consulta = "INSERT INTO imagenes (url, id_imagenes, casa_id_casa) VALUES (?, ?, ?);";
+    const consulta = "INSERT INTO imagenes ( id_imagenes, url, casa_id_casa) VALUES (?, ?, ?);";
     
-    const params = [imagenes.url, imagenes.id_imagenes, imagenes.casa_id_casa];
+    const params = [imagenes.id_imagenes ,imagenes.url, imagenes.casa_id_casa];
 
     connection.query(consulta, params, (err, result) => {
         if (err) {

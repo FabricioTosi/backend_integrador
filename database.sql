@@ -104,6 +104,7 @@ CREATE TABLE IF NOT EXISTS `imagenes` (
 
 
 INSERT INTO `silicon misiones`.`rol` (`id_rol`, `nombre_rol`) VALUES ('1', 'administrador');
+INSERT INTO `silicon misiones`.`rol` (`nombre_rol`) VALUES ('usuario');
 INSERT INTO `silicon misiones`.`usuario` (`id_usuario`, `nickname`, `password`, `email`, `telefono`, `rol_id_rol`) VALUES ('1', 'fabricio', '1234', 'fabricio@gmail.com', '1144950525', '1');
 INSERT INTO `silicon misiones`.`casa` (`id_casa`, `descripcion`, `precio_compra`, `superficie`, `precio_alquiler`) VALUES ('1', 'casa roja', '200.000', '200 metros cuadrados', '60.000');
 INSERT INTO `silicon misiones`.`reserva` (`id_reserva`, `fecha_reserva`, `fecha_inicio`, `fecha_fin`, `usuario_id_usuario`, `usuario_rol_id_rol`, `casa_id_casa`) VALUES ('1', '2023-10-17', '2023-10-17', '2023-10-17', '1', '1', '1');
