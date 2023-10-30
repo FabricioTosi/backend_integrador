@@ -8,7 +8,7 @@ const reservaDb = {};
 
 reservaDb.create = function (reserva, funcallback) {
     // Insertar una nueva reserva en la base de datos
-    const consulta = "INSERT INTO RESERVA (id_reserva, fecha_reserva, fecha_inicio, fecha_fin, usuario_id_usuario, casa_id_casa, usuario_rol_id_rol) VALUES (?,?,?,?,?,?,2);";
+    const consulta = "INSERT INTO RESERVA (id_reserva, fecha_reserva, fecha_inicio, fecha_fin, usuario_id_usuario, casa_id_casa, usuario_rol_id_rol) VALUES (?,?,?,?,?,?,?);";
     const params = [reserva.id_reserva, reserva.fecha_reserva, reserva.fecha_inicio, reserva.fecha_fin, reserva.usuario_id_usuario,  reserva.casa_id_casa, reserva.usuario_rol_id_rol];
 
     connection.query(consulta, params, (err, result) => {
