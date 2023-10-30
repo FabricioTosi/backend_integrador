@@ -14,13 +14,6 @@ connection.connect((err) => {
 
 var usuario_db = {};
 
-/*
-usuario_db : es un objeto que sera invocado desde los endpoint del controlador. Aquí en el MODEL, dicho objeto posee las funcionalidades que permiten la interaccion con la base de datos como getAll, update, etc. Entonces desde usuarioController puedo invocar a usuario_db.update(); o usuario_db.borrar();
-
-funCallback: en una funcion que la enviamos desde el endpoint del controlador, es mediante esta funcion que le damos una respuesta desde el MODEL hacia el CONTROLLER, aquí lo que enviamos como error o detalles con mensajes, es lo que recibira usuarioController para seguir su proceso de respuesta hacia el forontend
-*/
-
-
 // C = CREATE
 // usuarioController --> app.post('/', createUser);
 usuario_db.create = function (usuario, funcallback) {
@@ -91,8 +84,16 @@ usuario_db.borrar = function (id_usuario, retorno) {
     });
 };
 
-
 usuario_db.update = function (id_usuario, nuevosDatos, retorno) {
+    if (!nuevosDatos.password) {
+        // Handle the case where the password is missing or empty
+        retorno({
+            message: "Password is missing or empty",
+            detail: "Password is required for the update."
+        }, undefined);
+        return;
+    }
+
     let claveCifrada = bcrypt.hashSync(nuevosDatos.password, 10);
     const consulta = "UPDATE USUARIO SET nickname = ?, password = ?, email = ?, telefono = ?, rol_id_rol = ? WHERE id = ?";
     const params = [nuevosDatos.nickname, claveCifrada, nuevosDatos.email, nuevosDatos.telefono, nuevosDatos.rol_id_rol, id_usuario];

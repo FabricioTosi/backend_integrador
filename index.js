@@ -20,10 +20,9 @@ const auth = require("config/auth.js");
 const { verificarToken } = require('./config/auth');
 app.use('/security', auth.app);
 app.use('/security', securityController.app);
-//agregar verificarToken luego 
-app.use('/casa' , casaController);
+app.use('/casa', casaController);
 app.use('/api/usuario', usuarioController);
-app.use('/imagenes' , imagenesController);
+app.use('/api/imagenes' , imagenesController);
 app.use('/reserva' , reservaController);
 app.use('/compra',verificarToken , compraController);
 

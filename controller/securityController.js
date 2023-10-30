@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const config = require("config/conexion.json");
 const usuarioDb = require("model/usuario");
 
-app.use(express.json()); 
+app.use(express.json());
 app.post('/login', login);
 
 function login(req, res) {
@@ -30,7 +30,7 @@ function login(req, res) {
 
         // Crear un objeto de usuario para incluir en el token.
         const user = {
-
+            id_usuario: result.detail.id_usuario,
             nickname: result.detail.nickname,
             email: result.detail.email,
             rol: result.detail.nombre,
